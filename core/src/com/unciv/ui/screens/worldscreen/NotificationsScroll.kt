@@ -29,6 +29,7 @@ import com.unciv.ui.images.ImageGetter
 import com.unciv.ui.screens.basescreen.BaseScreen
 import com.unciv.ui.screens.basescreen.BaseScreen.Companion.skinStrings
 import com.unciv.ui.screens.overviewscreen.EmpireOverviewCategories
+import com.unciv.utils.withHash
 import yairm210.purity.annotations.Pure
 import com.unciv.ui.components.widgets.AutoScrollPane as ScrollPane
 
@@ -228,7 +229,7 @@ class NotificationsScroll(
         // Detect what to draw and if there's any changes part 1
         if (oneTimeNotification == null && clickedNotification != null)
             oneTimeNotification = clickedNotification  // reselecting can keep a "one-time" in the list
-        val newHash = notifications.hashCode() + oneTimeNotification.hashCode() * 31
+        val newHash = notifications.hashCode().withHash(oneTimeNotification.hashCode())
 
         // Determine highlight
         coloredHighlight = false

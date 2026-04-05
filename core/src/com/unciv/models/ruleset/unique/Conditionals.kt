@@ -8,6 +8,7 @@ import com.unciv.logic.civilization.Civilization
 import com.unciv.logic.civilization.managers.ReligionState
 import com.unciv.models.ruleset.validation.ModCompatibility
 import com.unciv.models.stats.Stat
+import com.unciv.utils.hashOf
 import yairm210.purity.annotations.Readonly
 import kotlin.random.Random
 
@@ -15,9 +16,10 @@ object Conditionals {
 
     @Readonly @Suppress("purity") // hashcode... requires a think
     private fun getStateBasedRandom(state: GameContext, unique: Unique?): Float {
-        var seed = state.gameInfo?.turns?.hashCode() ?: 0
-        seed = seed * 31 + (unique?.hashCode() ?: 0)
-        seed = seed * 31 + state.hashCode()
+        
+        val seed = hashOf(state.gameInfo?.turns?.hashCode() ?: 0,
+            unique?.hashCode() ?: 0,
+            state.hashCode())
         return Random(seed).nextFloat()
     }
 
