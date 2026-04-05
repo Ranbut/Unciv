@@ -6,10 +6,10 @@ import kotlin.random.Random
 @Pure
 fun Int.withHash(hash: Int) = this * 31 + hash
 
-@Pure 
+@Pure
 fun hashOf(vararg hashes: Int): Int {
     var finalHash = 0
-    for (hash in hashes) finalHash = finalHash.withHash(hash) 
+    hashes.forEach { finalHash = finalHash.withHash(it) } 
     return finalHash
 }
 
