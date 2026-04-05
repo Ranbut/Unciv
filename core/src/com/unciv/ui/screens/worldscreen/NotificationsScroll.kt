@@ -266,7 +266,7 @@ class NotificationsScroll(
 
         val backgroundDrawable = BaseScreen.skinStrings.getUiBackground("WorldScreen/Notification", BaseScreen.skinStrings.roundedEdgeRectangleShape)
 
-        val orderedNotifications = (additionalNotification + notifications.asReversed())
+        val orderedNotifications = (additionalNotification + notifications)
             .groupBy { it.category }
             .toSortedMap()  // This sorts by Category ordinal, so far intentional - the order of the grouped lists are unaffected
         for ((category, categoryNotifications) in orderedNotifications) {
