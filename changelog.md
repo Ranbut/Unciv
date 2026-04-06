@@ -1,38 +1,22 @@
 ## 4.20.1
 
-perf(ram): Remove memory allocations when retrieving units of an empty tile
+Drastically reduced memory consumption
 
-perf(ram): Reduce memory allocations in city presenter on worldscreen updates, when the city remains the same
+Barbarian encampments removed when tile enters civ territory
 
-perf(ram): Reduce memory allocations for clicking on minimap tiles
+Peace/war declarations on a third civ not considered trade "gifts"
 
-perf(ram): Reduce memory allocations for clicking on tiles significantly - accounts for 40% of ALL GAME RAM (!!!) on a large game I tested
+Fixed rare crash in cities when purchasing
 
-perf(ram): Reduce memory allocations for initial game load
+Buildings with "Moves to new capital when capital changes" not destroyed on city capture
 
-Resolved  - barbarian encampments removed when tile enters civ territory
+Desktop executables: Max JVM RAM *actually* increased to 4GB  
 
-.
-
-Resolved  - diplomacy action randomness is seeded
-
-Resolved  - peace/war declarations on a third civ are not considered trade "gifts"
-
-Resolved  - run construction button DTO construction calc a second time upon error to "catch" comodification errors
-
-chore: Add "is A-star pathing enabled" to crash reports since it's a common question
-
-Resolved  - buildings with "Moves to new capital when capital changes" not destroyed when city is captured
-
-Resolved  - max JVM heap space *actually* increased to 4GB for Desktop packed executables
-
-Resolved  - notifications are shown in UI in order of addition
+Notifications shown in UI in order
 
 By unciv-loof:
-- Denouncement popups with customizable leader messages and audio hook 
-- Autosave on turn 0 
-
-[Lint] Use full funtion bodies in UnitPresenter - By SeventhM
+- Denouncement popups with moddable messages and audio 
+- turn 0 Autosave 
 
 ## 4.20.0
 
