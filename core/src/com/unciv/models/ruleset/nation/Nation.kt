@@ -54,9 +54,14 @@ class Nation : RulesetObject() {
     var defeated = ""
     /** Shown for MajorCivDiplomacyTable.getDenounceButton */
     var denounced = ""
+
+    /** Popup message from the leader that issued a denouncement. */
+    var neutralDenouncing = ""
+    /** Popup message from the leader that issued a denouncement, when the relationship is poor. */
+    var hateDenouncing = ""
     /** Shown for Declaration of Friendship */
     var declaringFriendship = ""
-    /** Shown after we accpet reject a demand */
+    /** Popup message from the leader that accepted or rejected a demand */
     var acceptingDemand = ""
     var neutralRejectingDemand = ""
     var hateRejectingDemand = ""

@@ -104,6 +104,7 @@ class AlertPopup(
             AlertType.WarDeclaration -> shouldOpen = addWarDeclaration()
             AlertType.BorderConflict -> shouldOpen = addBorderConflict()
             AlertType.TilesStolen -> shouldOpen = addTilesStolen()
+            AlertType.Denounced -> shouldOpen = addDenouncement()
             
             // demands
             AlertType.DemandToStopSettlingCitiesNear -> shouldOpen = addDemand(Demand.DoNotSettleNearUs)
@@ -270,6 +271,31 @@ class AlertPopup(
         return true
     }
 
+    private fun addDenouncement(): Boolean {
+        val denouncer = getCiv(popupAlert.value)
+        if (denouncer.isDefeated())
+            return false
+        addLeaderName(denouncer)
+        addTopicHeader("DENOUNCEMENT", LIGHTER_ORANGE_COLOR)
+        // normal message unless we are enemies
+        val leaderMessage = if (denouncer.getDiplomacyManager(viewingCiv)!!.isRelationshipLevelGE(RelationshipLevel.Competitor)) {
+            music.playVoice("${denouncer.nation.name}.neutralDenouncing")
+            denouncer.nation.neutralDenouncing.ifEmpty { "You have violated our bond of trust. This is intolerable!" }
+        } else {
+            music.playVoice("${denouncer.nation.name}.hateDenouncing")
+            denouncer.nation.hateDenouncing.ifEmpty { "You are a scourge upon this earth. I denounce you!" }
+        }
+        addGoodSizedLabel(leaderMessage).row()
+        val diplomacy = viewingCiv.getDiplomacyManager(denouncer)!!
+        if (diplomacy.canDeclareWar()) {
+            addCloseButton("THIS MEANS WAR! (Declare war)") {
+                diplomacy.declareWar()
+            }.row()
+        }
+        addCloseButton("Very well.", KeyboardBinding.Cancel).row()
+        return true
+    }
+    
     private fun addDefeated() {
         val civInfo = getCiv(popupAlert.value)
         addLeaderName(civInfo)

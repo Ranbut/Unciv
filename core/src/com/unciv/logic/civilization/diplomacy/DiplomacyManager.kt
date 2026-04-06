@@ -815,7 +815,11 @@ class DiplomacyManager() : IsPartOfGameInfoSerialization {
         // before adjusting with game speed - consider possible side effects of this
         setFlag(DiplomacyFlags.Denunciation, 30)
         
-        // TODO: make denouncement more impactful with a popup
+        // the denounced civ will get a popup
+        otherCiv.popupAlerts.add(
+            PopupAlert(AlertType.Denounced, civInfo.civID)
+        )
+        // ...and a notification as a reminder for the rest of the turn
         otherCiv.addNotification(
             "[${civInfo.civName}] has denounced us!",
             NotificationCategory.Diplomacy,
