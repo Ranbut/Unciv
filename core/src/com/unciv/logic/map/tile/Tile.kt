@@ -814,6 +814,8 @@ class Tile : IsPartOfGameInfoSerialization {
         else probability
     }
 
+    /** Will be false if this is a "fake tile" - either created for calculation purposes, 
+     * or to display how things look e.g. in Civilopedia  */
     fun isTilemapInitialized() = ::tileMap.isInitialized
 
     //endregion
@@ -1023,8 +1025,8 @@ class Tile : IsPartOfGameInfoSerialization {
         }
     }
 
-    fun setImprovementBasic(tileImprovement: String) {
-        val tileImprovement = ruleset.tileImprovements[tileImprovement]
+    fun setImprovementBasic(improvementName: String) {
+        val tileImprovement = ruleset.tileImprovements[improvementName]
         this.tileImprovement = tileImprovement
         improvement = tileImprovement?.name
     }
