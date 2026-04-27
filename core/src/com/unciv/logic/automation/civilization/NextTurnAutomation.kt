@@ -31,6 +31,7 @@ import com.unciv.ui.screens.victoryscreen.RankingType
 import com.unciv.utils.randomWeighted
 import org.jetbrains.annotations.VisibleForTesting
 import yairm210.purity.annotations.Readonly
+import kotlin.random.Random
 
 object NextTurnAutomation {
 
@@ -60,6 +61,7 @@ object NextTurnAutomation {
             DiplomacyAutomation.offerOpenBorders(civInfo)
             DiplomacyAutomation.offerResearchAgreement(civInfo)
             DiplomacyAutomation.offerDefensivePact(civInfo)
+            DiplomacyAutomation.checkMilitaryPresenceNearBorder(civInfo)
             TradeAutomation.exchangeLuxuries(civInfo)
             
             issueRequests(civInfo)
@@ -639,30 +641,45 @@ object NextTurnAutomation {
     }
 
     private fun issueRequests(civInfo: Civilization) {
-        for (otherCiv in civInfo.getKnownCivs().filter { it.isMajorCiv() && !civInfo.isAtWarWith(it) }) {
+        for (otherCiv in civInfo.getKnownCivs().filter { it.isMajorCiv() }) {
             val diploManager = civInfo.getDiplomacyManager(otherCiv)!!
-            for (demand in Demand.entries){
+            for (demand in Demand.entries) {
                 if (diploManager.hasFlag(demand.violationOccurred))
                     onDemandViolation(demand, civInfo, otherCiv)
             }
         }
     }
-
     
-    private fun onDemandViolation(demand: Demand, civInfo: Civilization, otherCiv: Civilization) {
-        val diplomacyManager = civInfo.getDiplomacyManager(otherCiv)!!
+    private fun onDemandViolation(demand: Demand, civInfo: Civilization, offendingCiv: Civilization) {
+        // most demand violations are not checked during war
+        if (civInfo.isAtWarWith(offendingCiv) && demand != Demand.DoNotAttackUs)
+            return
+        val diplomacyManager = civInfo.getDiplomacyManager(offendingCiv)!!
         when {
             diplomacyManager.hasFlag(demand.willIgnoreViolation) -> {}
+            // violation after promise (broke promise)
             diplomacyManager.hasFlag(demand.agreedToDemand) -> {
-                otherCiv.popupAlerts.add(PopupAlert(demand.violationDiscoveredAlert, civInfo.civID))
+                offendingCiv.popupAlerts.add(PopupAlert(demand.violationDiscoveredAlert, civInfo.civID))
                 diplomacyManager.setFlag(demand.willIgnoreViolation, 100, true)
-                diplomacyManager.setModifier(demand.betrayedPromiseDiplomacyMpodifier, -20f)
+                diplomacyManager.setModifier(demand.betrayedPromiseDiplomacyModifier, -20f)
+                if (demand == Demand.DoNotAttackUs)
+                    // relationship penalty with all common known civs, similar to DoF backstabbing
+                    // TODO: apply WarmongerHatred personality trait here?
+                    for (thirdPartyCiv in diplomacyManager.getCommonKnownCivs()) {
+                        thirdPartyCiv.getDiplomacyManager(offendingCiv)!!
+                            .setModifier(
+                                DiplomaticModifiers.BetrayedPromiseToNotAttackOtherCiv,
+                                -10f
+                            )
+                    }
                 diplomacyManager.removeFlag(demand.agreedToDemand)
             }
+            // violation before promise
             else -> {
-                val threatLevel = Automation.threatAssessment(civInfo, otherCiv)
-                if (threatLevel < ThreatLevel.High) // don't piss them off for no reason please.
-                    otherCiv.popupAlerts.add(PopupAlert(demand.demandAlert, civInfo.civID))
+                val threatLevel = Automation.threatAssessment(civInfo, offendingCiv)
+                if (threatLevel < ThreatLevel.High // don't piss them off for no reason please.
+                    || demand == Demand.DoNotAttackUs) 
+                    offendingCiv.popupAlerts.add(PopupAlert(demand.demandAlert, civInfo.civID))
             }
         }
         diplomacyManager.removeFlag(demand.violationOccurred)
