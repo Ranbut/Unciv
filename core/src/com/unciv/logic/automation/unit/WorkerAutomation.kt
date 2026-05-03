@@ -370,6 +370,11 @@ class WorkerAutomation(
                     && (it.value.uniqueTo == null || unit.civ.matchesFilter(it.value.uniqueTo!!, gameContext))
                     && unit.canBuildImprovement(it.value, tile)
                     && tile.improvementFunctions.canBuildImprovement(it.value, gameContext)
+                // Properly exclude removing forest and jungle tiles from potentialTileImprovements.
+                    && !(UncivGame.Current.settings.stopAutomatedWorkersRemoveVegetation &&
+                        tile.terrainHasUnique(UniqueType.Vegetation) &&
+                        it.value.name.startsWith(Constants.remove) &&
+                        civInfo.isHuman()) // Make sure to only apply this to player automated workers.
         }
         if (potentialTileImprovements.isEmpty()) return null
 
@@ -387,7 +392,7 @@ class WorkerAutomation(
         }
 
         val lastTerrain = tile.lastTerrain
-
+        
         @Readonly fun isRemovable(terrain: Terrain): Boolean =
             potentialTileImprovements.containsKey(Constants.remove + terrain.name)
 
@@ -468,6 +473,7 @@ class WorkerAutomation(
                 })
         )
             return 0f
+        
 
         @LocalState val stats = tile.stats.getStatDiffForImprovement(improvement, civInfo, tile.getCity(), localUniqueCache, currentTileStats)
 
