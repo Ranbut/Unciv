@@ -1,24 +1,19 @@
 ## 4.20.4
 
-modding: Ignore ruleset-specific errors when unique is disabled in this particular ruleset
-
-chore: update purity version
+modding: Ignore ruleset-specific errors when unique is disabled in this ruleset
 
 By SomeTroglodyte:
--  Hide religion- or espionage-specific demands when the feature is off 
-- Fix: NPE when Espionage Screen is used to move a spy and the Civs don't know each other 
+- Hide religion- or espionage-specific demands when disabled 
+- Fixed NPE when Espionage Screen is used to move a spy to an unknown civ's city 
 
 By unciv-loof:
-- Add missing table row 
-- Simplify logic for skip/force resign notification 
+- Add missing table row for city resistance 
 
 By Ambeco:
-- Eliminating known unseeded Randomness. 
-- AStar checks tiles near target first. 
-- Unciv can receive links directly to games or new friends 
-- Fixed warnings caused by timeThis 
+- Unciv can receive links directly to games or new friends
+- Prevent save-scumming for more types of randomness
 
-Added a option to stop workers from removing vegetation terrain - By Emandac
+Added option to stop workers from removing vegetation - By Emandac
 
 ## 4.20.3
 
