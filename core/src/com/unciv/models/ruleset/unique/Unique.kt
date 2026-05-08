@@ -231,10 +231,7 @@ class Unique(val text: String, val sourceObjectType: UniqueTarget? = null, val s
         // filter out possible replacements that are obviously wrong
         val uniquesWithNoErrors = finalPossibleUniques.filter {
             val unique = Unique(it)
-            val errors = UniqueValidator(ruleset).checkUnique(
-                unique, true, null,
-                true
-            )
+            val errors = UniqueValidator(ruleset).checkUnique(unique, true, null)
             errors.isEmpty()
         }
         if (uniquesWithNoErrors.size == 1) return uniquesWithNoErrors.first()
