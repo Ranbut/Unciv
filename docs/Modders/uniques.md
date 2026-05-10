@@ -3952,6 +3952,11 @@ Simple unique parameters are explained by mouseover. Complex parameters are expl
 
 	Applicable to: TriggerCondition
 
+??? example  "&lt;upon losing a [mapUnitFilter] unit&gt;"
+	Example: "&lt;upon losing a [Wounded] unit&gt;"
+
+	Applicable to: TriggerCondition
+
 ??? example  "&lt;upon turn end&gt;"
 	Applicable to: TriggerCondition, UnitTriggerCondition
 
