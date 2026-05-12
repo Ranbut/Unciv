@@ -1,11 +1,5 @@
 ## 4.20.6
 
-chore(ci): Attempt to fix CI by using latest upstream AUR updater
-
-4.20.5-patch1
-
-Revert bad android settings change 
-
 By SeventhM:
 - Allow enabling embassies in Global/Policy/Era uniques instead of just techs 
 - Fix redundant requirement for sending embassies 
@@ -14,7 +8,7 @@ By SeventhM:
 
 Improve language handling and slightly ease use of first-run language picker - By SomeTroglodyte
 
-Replaced LocalUniqueCache with .forEach mathods. - By Ambeco
+CPU performance improvements - By Ambeco
 
 ## 4.20.5
 
